@@ -5,7 +5,7 @@ import android.util.Log;
 public class RSPush {
 
     public static void showMsg(String msg){
-        Log.d("RSPush",msg);
+        Log.d("RSPush","Dhing---" + msg);
     }
 
 
