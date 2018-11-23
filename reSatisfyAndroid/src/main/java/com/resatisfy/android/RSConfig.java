@@ -1,6 +1,7 @@
 package com.resatisfy.android;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.util.Log;
 
@@ -12,7 +13,7 @@ public class RSConfig {
 
     private String developmentAppKey; private String developmentAppSecret;
     private String productionAppKey; private String productionAppSecret;
-    private String fcmSenderId;
+    private String fcmSenderId; private Boolean isProduction;
 
 
     public static RSConfig defaultConfig(Context context){
@@ -25,6 +26,13 @@ public class RSConfig {
             myConfig.fcmSenderId = getProperty("fcmSenderId",context);
         } catch (IOException e) {
             Log.e("RSPush","rsconfig.properties not set up properly!");
+        }
+
+        boolean isDebuggable = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
+        if(isDebuggable){
+            myConfig.isProduction = false;
+        }else{
+            myConfig.isProduction = true;
         }
 
         return myConfig;
@@ -41,7 +49,7 @@ public class RSConfig {
     }
 
     public String getAppKey(){
-        if(this.getAppMode()){
+        if(this.isProduction){
             return this.productionAppKey;
         }else{
             return this.developmentAppKey;
@@ -49,7 +57,7 @@ public class RSConfig {
     }
 
     public String getAppSecret(){
-        if(this.getAppMode()){
+        if(this.isProduction){
             return this.productionAppSecret;
         }else{
             return this.developmentAppSecret;
@@ -60,13 +68,6 @@ public class RSConfig {
         return this.fcmSenderId;
     }
 
-    private static Boolean getAppMode(){
-        if (BuildConfig.DEBUG) {
-            return false;
-        }else{
-            return true;
-        }
-    }
 
 
 

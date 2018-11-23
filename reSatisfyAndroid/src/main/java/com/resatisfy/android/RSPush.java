@@ -39,8 +39,10 @@ public class RSPush {
     }
 
 
-    static void registerDevice(Context context, RSConfig rsConfig, String token){
+    static void registerDevice(final Context context, RSConfig rsConfig, String token){
 
+
+        //System.out.println("device token : " + token);
         Retrofit retrfit=new Retrofit.Builder()
                 .baseUrl(RSSettings.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,13 +68,18 @@ public class RSPush {
                 if(response.isSuccessful()){
                     RSDeviceRegModel getRes=response.body();
                     String getStatus=getRes.getStatus();
-                    
-                    System.out.println("/////////////////////////");
-                    System.out.println(getStatus);
-                    System.out.println(getRes.getChannelId());
 
                     if(getStatus.equals("success")) {
+                        SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+                        String rsChannelId = sharedPref.getString("rsChannelId", "");
+                        String retriveChannelId = getRes.getChannelId();
+                        if(!rsChannelId.isEmpty() && retriveChannelId.equals(rsChannelId)){
 
+                        }else{
+                            SharedPreferences.Editor editor =  sharedPref.edit();
+                            editor.putString("rsChannelId", retriveChannelId);
+                            editor.commit();
+                        }
                     } else if (!getRes.getMsg().isEmpty()){
                         Log.e("RSPush",getRes.getMsg());
                     }
@@ -86,8 +93,19 @@ public class RSPush {
 
     }
 
+    public static String channelId(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+        String rsChannelId = sharedPref.getString("rsChannelId", "");
+
+        if(rsChannelId.isEmpty()){
+            return "RSPush : wait until device registration completed!";
+        }else{
+            return rsChannelId;
+        }
+    }
+
     private static String createChannel(){
-        final String uuid =UUID.randomUUID().toString();
+        final String uuid = UUID.randomUUID().toString();
         return uuid;
     }
 

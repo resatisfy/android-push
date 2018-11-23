@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         RSPush.takeOff(getApplicationContext());
 
 
-
+//        System.out.println("---------------------------------");
+//        System.out.println(RSPush.channelId(getApplicationContext()));
     }
 
 
