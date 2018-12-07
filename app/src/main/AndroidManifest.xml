@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.resatisfy.app">
+    package="com.resatisfy.push">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
     <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -15,21 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-
-        <receiver android:name=".MyPushReceive">
+        <receiver android:name=".MyPushReceiver">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
-
-
-
-
-
-
-
 
         <activity android:name=".MainActivity">
             <intent-filter>

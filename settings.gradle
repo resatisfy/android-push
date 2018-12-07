@@ -1,1 +1,1 @@
-include ':app', ':reSatisfyAndroid'
+include ':app', ':resatisfy'

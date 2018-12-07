@@ -1,35 +1,35 @@
 {
   "project_info": {
-    "project_number": "",
-    "firebase_url": "",
-    "project_id": "",
-    "storage_bucket": ""
+    "project_number": "2170022275",
+    "firebase_url": "https://resatisfy-219604.firebaseio.com",
+    "project_id": "resatisfy-219604",
+    "storage_bucket": "resatisfy-219604.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "1:2170022275:android:a18e6a77b21f122b",
         "android_client_info": {
-          "package_name": ""
+          "package_name": "com.resatisfy.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "",
+          "client_id": "2170022275-rmpi7dc96obm7qbao6vboeu1osm1apg3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "",
-            "certificate_hash": ""
+            "package_name": "com.resatisfy.app",
+            "certificate_hash": "691bc358f2d4745e1fc070b738aba6dcac1e1ad7"
           }
         },
         {
-          "client_id": "",
+          "client_id": "2170022275-nm95g2ln6stod6fb8e2bl5p3vpk7easq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": ""
+          "current_key": "AIzaSyCpmegGuWeoZ_cqZdw1mmQpfQMr8F-muO0"
         }
       ],
       "services": {
@@ -40,7 +40,51 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "",
+              "client_id": "2170022275-nm95g2ln6stod6fb8e2bl5p3vpk7easq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2170022275:android:388a1f4b410a9741",
+        "android_client_info": {
+          "package_name": "com.resatisfy.push"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2170022275-h7u4v9c107kdonie631aa6bq2h5v8151.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.resatisfy.push",
+            "certificate_hash": "73545c170c41c61c5ae86367ed573afc293a5d42"
+          }
+        },
+        {
+          "client_id": "2170022275-nm95g2ln6stod6fb8e2bl5p3vpk7easq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpmegGuWeoZ_cqZdw1mmQpfQMr8F-muO0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2170022275-nm95g2ln6stod6fb8e2bl5p3vpk7easq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
