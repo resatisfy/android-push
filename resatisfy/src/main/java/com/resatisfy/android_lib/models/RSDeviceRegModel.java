@@ -37,5 +37,9 @@ public class RSDeviceRegModel {
     public String getFcmSenderId() { return this.fcmSenderId; }
     public void setFcmSenderId(String fcmSenderId) { this.fcmSenderId = fcmSenderId; }
 
+    private String isActive;
+    public String getIsActive() { return this.isActive; }
+    public void setIsActive(String isActive) { this.isActive = isActive; }
+
 
 }

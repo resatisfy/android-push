@@ -1,6 +1,7 @@
 package com.resatisfy.android_lib.utilities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import com.resatisfy.android_lib.models.RSChannelModel;
 import java.util.HashMap;
@@ -22,6 +23,10 @@ public class RSUtility {
             if(getConfig.getAppKey().isEmpty()){
                 Log.e("RSPush","config error!");
             }else{
+                SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor =  sharedPref.edit();
+                editor.putString("rsChannelStatus", "inactive");
+                editor.commit();
                 deactiveChannelAction(channelId, getConfig);
             }
         }
@@ -52,7 +57,7 @@ public class RSUtility {
                     String getStatus=getRes.getStatus();
 
                     if(getStatus.equals("success")) {
-                        Log.d("RSPush", "");
+                        //Log.d("RSPush", "");
                     } else if (!getRes.getMsg().isEmpty()){
                         Log.e("RSPush",getRes.getMsg());
                     }
@@ -74,6 +79,10 @@ public class RSUtility {
             if(getConfig.getAppKey().isEmpty()){
                 Log.e("RSPush","config error!");
             }else {
+                SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor =  sharedPref.edit();
+                editor.putString("rsChannelStatus", "active");
+                editor.commit();
                 activeChannelAction(channelId, getConfig);
             }
         }
@@ -103,7 +112,7 @@ public class RSUtility {
                     RSChannelModel getRes=response.body();
                     String getStatus=getRes.getStatus();
                     if(getStatus.equals("success")) {
-                        Log.d("RSPush", "");
+                        //Log.d("RSPush", "");
                     } else if (!getRes.getMsg().isEmpty()){
                         Log.e("RSPush",getRes.getMsg());
                     }

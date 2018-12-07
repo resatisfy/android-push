@@ -26,8 +26,20 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RSPush {
 
+    private static SharedPreferences sharedPref;
+    private static SharedPreferences.Editor editor;
+    private static String rsChannelId;
 
     public static void takeOff(Context context){
+        sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+        editor =  sharedPref.edit();
+        rsChannelId = sharedPref.getString("rsChannelId", "");
+        if(rsChannelId.length() == 0){
+            rsChannelId = RSPush.createChannel();
+            editor.putString("rsChannelId",rsChannelId);
+            editor.commit();
+        }
+
         RSConfig getConfig = RSConfig.defaultConfig(context);
         RSPush.registerForPushNotifications(context,getConfig);
     }
@@ -45,8 +57,6 @@ public class RSPush {
 
     static void registerDevice(final Context context, RSConfig rsConfig, String token){
 
-
-        //System.out.println("device token : " + token);
         Retrofit retrfit=new Retrofit.Builder()
                 .baseUrl(RSSettings.getApiUrl())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -60,7 +70,7 @@ public class RSPush {
         postData.setDeviceType("android");
         postData.setFcmSenderId(rsConfig.getSenderId());
         postData.setIosAndroidId(context.getPackageName());
-        postData.setChannelId(RSPush.createChannel());
+        postData.setChannelId(rsChannelId);
 
 
         Map<String, String> map = new HashMap<>();
@@ -72,16 +82,14 @@ public class RSPush {
                 if(response.isSuccessful()){
                     RSDeviceRegModel getRes=response.body();
                     String getStatus=getRes.getStatus();
-
+                    
                     if(getStatus.equals("success")) {
-                        SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
-                        String rsChannelId = sharedPref.getString("rsChannelId", "");
-                        String retriveChannelId = getRes.getChannelId();
-                        if(!rsChannelId.isEmpty() && retriveChannelId.equals(rsChannelId)){
+                        String getIsActive = getRes.getIsActive();
+                        String rsChannelStatus = sharedPref.getString("rsChannelStatus", "");
+                        if(!rsChannelStatus.isEmpty() && getIsActive.equals(rsChannelStatus)){
 
                         }else{
-                            SharedPreferences.Editor editor =  sharedPref.edit();
-                            editor.putString("rsChannelId", retriveChannelId);
+                            editor.putString("rsChannelStatus", getIsActive);
                             editor.commit();
                         }
                     } else if (!getRes.getMsg().isEmpty()){
@@ -91,7 +99,7 @@ public class RSPush {
             }
             @Override
             public void onFailure(Call<RSDeviceRegModel> call, Throwable t) {
-
+                Log.e("RSPush","api server error!");
             }
         });
 
@@ -105,6 +113,17 @@ public class RSPush {
             return "RSPush : wait until device registration completed!";
         }else{
             return rsChannelId;
+        }
+    }
+
+    public static String getChannelStatus(Context context){
+        SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+        String rsChannelStatus = sharedPref.getString("rsChannelStatus", "");
+
+        if(rsChannelStatus.isEmpty()){
+            return "active";
+        }else{
+            return rsChannelStatus;
         }
     }
 
