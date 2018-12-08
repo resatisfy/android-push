@@ -22,6 +22,16 @@ android {
 
 }
 
+ext {
+    firebaseVersion = "15.0.2"
+    try{
+        rsConfigProperties = new Properties()
+        rsConfigProperties.load(new FileInputStream("local.properties"))
+        firebaseVersion = rsConfigProperties.firebaseVersion
+    }catch(Exception e){}
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -32,6 +42,7 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.google.firebase:firebase-messaging:'+firebaseVersion
 
+    
 }
