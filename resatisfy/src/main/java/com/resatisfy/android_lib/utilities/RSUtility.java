@@ -3,6 +3,8 @@ package com.resatisfy.android_lib.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.resatisfy.android_lib.RSPush;
 import com.resatisfy.android_lib.models.RSChannelModel;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RSUtility {
 
-    public static void deactiveChannel(Context context,String channelId){
+    public static void deactiveChannel(Context context){
+        String channelId = RSPush.channelId(context);
         if(channelId.isEmpty()){
             Log.e("RSPush", "Channel Id is empty.");
         }else{
@@ -71,7 +74,8 @@ public class RSUtility {
     }
 
 
-    public static void activeChannel(Context context,String channelId){
+    public static void activeChannel(Context context){
+        String channelId = RSPush.channelId(context);
         if(channelId.isEmpty()){
             Log.e("RSPush", "Channel Id is empty.");
         }else{
