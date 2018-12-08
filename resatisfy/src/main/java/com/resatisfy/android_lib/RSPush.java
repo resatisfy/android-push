@@ -31,17 +31,19 @@ public class RSPush {
     private static String rsChannelId;
 
     public static void takeOff(Context context){
-        sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
-        editor =  sharedPref.edit();
-        rsChannelId = sharedPref.getString("rsChannelId", "");
-        if(rsChannelId.length() == 0){
-            rsChannelId = RSPush.createChannel();
-            editor.putString("rsChannelId",rsChannelId);
-            editor.commit();
-        }
-
         RSConfig getConfig = RSConfig.defaultConfig(context);
-        RSPush.registerForPushNotifications(context,getConfig);
+
+        if(getConfig.getAppKey().length() > 0){
+            sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+            editor =  sharedPref.edit();
+            rsChannelId = sharedPref.getString("rsChannelId", "");
+            if(rsChannelId.length() == 0){
+                rsChannelId = RSPush.createChannel();
+                editor.putString("rsChannelId",rsChannelId);
+                editor.commit();
+            }
+            RSPush.registerForPushNotifications(context,getConfig);
+        }
     }
 
 

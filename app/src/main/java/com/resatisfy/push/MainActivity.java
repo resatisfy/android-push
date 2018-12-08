@@ -18,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(getApplicationContext());
         RSPush.takeOff(getApplicationContext());
 
-        System.out.println("---------------------------------");
-        System.out.println(RSPush.channelId(getApplicationContext()));
+//        System.out.println("---------------------------------AS");
+//        System.out.println(RSPush.channelId(getApplicationContext()));
 
         //this.deactiveChannel(RSPush.channelId(getApplicationContext()));
 
