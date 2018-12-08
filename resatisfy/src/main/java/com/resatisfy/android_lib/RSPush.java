@@ -32,7 +32,6 @@ public class RSPush {
 
     public static void takeOff(Context context){
         RSConfig getConfig = RSConfig.defaultConfig(context);
-
         try {
             if(getConfig.getAppKey().length() > 0){
                 sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
@@ -45,7 +44,9 @@ public class RSPush {
                 }
                 RSPush.registerForPushNotifications(context,getConfig);
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            Log.e("RSPush","rsconfig.properties not set up properly!");
+        }
     }
 
 
@@ -114,7 +115,7 @@ public class RSPush {
         String rsChannelId = sharedPref.getString("rsChannelId", "");
 
         if(rsChannelId.isEmpty()){
-            return "RSPush : wait until device registration completed!";
+            return "RSPush : rsconfig.properties not set up properly!";
         }else{
             return rsChannelId;
         }
