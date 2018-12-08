@@ -23,11 +23,11 @@ android {
 }
 
 ext {
-    firebaseVersion = "15.0.2"
+    firebaseFcmVersion = "15.0.2"
     try{
         rsConfigProperties = new Properties()
         rsConfigProperties.load(new FileInputStream("local.properties"))
-        firebaseVersion = rsConfigProperties.firebaseVersion
+        firebaseFcmVersion = rsConfigProperties.firebaseFcmVersion
     }catch(Exception e){}
 }
 
@@ -42,10 +42,10 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
-    if(firebaseVersion == null){
+    if(firebaseFcmVersion == null){
         implementation "com.google.firebase:firebase-messaging:15.0.2"
     }else{
-        implementation "com.google.firebase:firebase-messaging:${firebaseVersion}"
+        implementation "com.google.firebase:firebase-messaging:${firebaseFcmVersion}"
     }
 
 
