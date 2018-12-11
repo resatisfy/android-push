@@ -1,5 +1,7 @@
 package com.resatisfy.push;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -7,6 +9,7 @@ import android.util.Log;
 
 import com.resatisfy.android_lib.controllers.RSPushReciver;
 
+import java.util.List;
 
 
 public class MyPushReceiver extends RSPushReciver {
@@ -30,9 +33,35 @@ public class MyPushReceiver extends RSPushReciver {
         System.out.println(title);
         System.out.println(msg);
 
-        //this.launchSomeActivity(context,title);
+
+        if (isAppForground(context)) {
+            Intent i = new Intent(context, MainActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("title",title);
+            i.putExtra("msg",msg);
+            context.startActivity(i);
+        } else {
+            // App is in Background
+        }
 
 
+    }
+
+
+
+
+    public boolean isAppForground(Context mContext) {
+
+        ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(mContext.getPackageName())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
