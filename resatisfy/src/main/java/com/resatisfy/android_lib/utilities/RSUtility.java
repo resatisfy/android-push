@@ -134,7 +134,56 @@ public class RSUtility {
 
 
 
+    public static void deleteChannel(Context context){
+        String channelId = RSPush.channelId(context);
+        if(channelId.isEmpty()){
+            Log.e("RSPush", "Channel Id is empty.");
+        }else{
+            RSConfig getConfig = RSConfig.defaultConfig(context);
+            if(getConfig.getAppKey().isEmpty()){
+                Log.e("RSPush","config error!");
+            }else {
+                deleteChannelAction(channelId, getConfig);
+            }
+        }
+    }
 
+    private static void deleteChannelAction(String channelId, RSConfig rsConfig){
+        Retrofit retrfit=new Retrofit.Builder()
+                .baseUrl(RSSettings.getApiUrl())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        RSInterface PostRest=retrfit.create(RSInterface.class);
+
+        RSChannelModel postData=new RSChannelModel();
+        postData.setAppKey(rsConfig.getAppKey());
+        postData.setAppSecret(rsConfig.getAppSecret());
+        postData.setDeviceType("android");
+        postData.setChannelId(channelId);
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("Content-Type", "application/json");
+        Call<RSChannelModel> call = PostRest.post_delete_channel(postData);
+        call.enqueue(new Callback<RSChannelModel>() {
+            @Override
+            public void onResponse(Call<RSChannelModel> call, Response<RSChannelModel> response) {
+                if(response.isSuccessful()){
+                    RSChannelModel getRes=response.body();
+                    String getStatus=getRes.getStatus();
+                    if(getStatus.equals("success")) {
+                        //Log.d("RSPush", "");
+                    } else if (!getRes.getMsg().isEmpty()){
+                        //Log.e("RSPush",getRes.getMsg());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<RSChannelModel> call, Throwable t) {
+                Log.e("RSPush","api server error!");
+            }
+        });
+    }
 
 
 

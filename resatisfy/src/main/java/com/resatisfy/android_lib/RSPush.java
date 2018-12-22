@@ -3,6 +3,7 @@ package com.resatisfy.android_lib;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -129,6 +130,17 @@ public class RSPush {
             return "active";
         }else{
             return rsChannelStatus;
+        }
+    }
+
+    public static String getDeviceStatus(Context context){
+        Boolean isNotificationenable = NotificationManagerCompat.from(context)
+                .areNotificationsEnabled();
+
+        if(isNotificationenable){
+            return "active";
+        }else{
+            return "Push notification is disabled from your iPhone settings!";
         }
     }
 

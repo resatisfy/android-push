@@ -22,4 +22,8 @@ public interface RSInterface {
     @POST("post-deactive-channel")
     Call<RSChannelModel> post_deactive_channel(@Body RSChannelModel data);
 
+    @Headers({"rs_token: " + RSSettings.rsToken, "Content-Type: application/json"})
+    @POST("post-delete-channel")
+    Call<RSChannelModel> post_delete_channel(@Body RSChannelModel data);
+
 }
