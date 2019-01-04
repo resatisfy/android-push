@@ -2,6 +2,7 @@ package com.resatisfy.android_lib.utilities;
 
 import com.resatisfy.android_lib.models.RSChannelModel;
 import com.resatisfy.android_lib.models.RSDeviceRegModel;
+import com.resatisfy.android_lib.models.RSReportModel;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -25,5 +26,16 @@ public interface RSInterface {
     @Headers({"rs_token: " + RSSettings.rsToken, "Content-Type: application/json"})
     @POST("post-delete-channel")
     Call<RSChannelModel> post_delete_channel(@Body RSChannelModel data);
+
+    @Headers({"rs_token: " + RSSettings.rsToken, "Content-Type: application/json"})
+    @POST("post-report")
+    Call<RSReportModel> post_report(@Body RSReportModel data);
+
+
+
+
+
+
+
 
 }
