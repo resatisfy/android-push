@@ -2,20 +2,16 @@ package com.resatisfy.android_lib.utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 
 import com.resatisfy.android_lib.RSPush;
-import com.resatisfy.android_lib.models.RSChannelModel;
-import java.util.HashMap;
-import java.util.Map;
+import com.resatisfy.android_lib.controllers.RSHttpConnection;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import org.json.JSONObject;
 
-public class RSUtility {
+
+public class RSUtility implements RSHttpsInterface {
 
     public static void deactiveChannel(Context context){
         String channelId = RSPush.channelId(context);
@@ -36,41 +32,31 @@ public class RSUtility {
     }
 
     private static void deactiveChannelAction(String channelId, RSConfig rsConfig){
-        Retrofit retrfit=new Retrofit.Builder()
-                .baseUrl(RSSettings.getApiUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RSInterface PostRest=retrfit.create(RSInterface.class);
 
-        RSChannelModel postData=new RSChannelModel();
-        postData.setAppKey(rsConfig.getAppKey());
-        postData.setAppSecret(rsConfig.getAppSecret());
-        postData.setDeviceType("android");
-        postData.setChannelId(channelId);
+        Uri.Builder builder = new Uri.Builder();
+        builder.appendQueryParameter("appKey", rsConfig.getAppKey());
+        builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
+        builder.appendQueryParameter("deviceType", "android");
+        builder.appendQueryParameter("channelId",channelId);
 
+        String postQuery = builder.build().getEncodedQuery();
 
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        Call<RSChannelModel> call = PostRest.post_deactive_channel(postData);
-        call.enqueue(new Callback<RSChannelModel>() {
-            @Override
-            public void onResponse(Call<RSChannelModel> call, Response<RSChannelModel> response) {
-                if(response.isSuccessful()){
-                    RSChannelModel getRes=response.body();
-                    String getStatus=getRes.getStatus();
+        RSUtility cBack = new RSUtility();
+        new RSHttpConnection("deactive-channel", postQuery,cBack).execute();
 
-                    if(getStatus.equals("success")) {
-                        //Log.d("RSPush", "");
-                    } else if (!getRes.getMsg().isEmpty()){
-                        Log.e("RSPush",getRes.getMsg());
-                    }
-                }
+    }
+
+    @Override
+    public void RSHttpsCompletion(JSONObject json) {
+        try{
+            String getStatus = json.getString("status");
+            if(getStatus.equals("success")) {
+                //
+                System.out.println("yes success----------");
+            } else if (!json.getString("msg").isEmpty()){
+                Log.e("RSPush",json.getString("msg") );
             }
-            @Override
-            public void onFailure(Call<RSChannelModel> call, Throwable t) {
-                Log.e("RSPush","api server error!");
-            }
-        });
+        }catch (Exception e){}
     }
 
 
@@ -92,45 +78,22 @@ public class RSUtility {
         }
     }
 
+
+
     private static void activeChannelAction(String channelId, RSConfig rsConfig){
-        Retrofit retrfit=new Retrofit.Builder()
-                .baseUrl(RSSettings.getApiUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RSInterface PostRest=retrfit.create(RSInterface.class);
 
-        RSChannelModel postData=new RSChannelModel();
-        postData.setAppKey(rsConfig.getAppKey());
-        postData.setAppSecret(rsConfig.getAppSecret());
-        postData.setDeviceType("android");
-        postData.setChannelId(channelId);
+        Uri.Builder builder = new Uri.Builder();
+        builder.appendQueryParameter("appKey", rsConfig.getAppKey());
+        builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
+        builder.appendQueryParameter("deviceType", "android");
+        builder.appendQueryParameter("channelId",channelId);
 
+        String postQuery = builder.build().getEncodedQuery();
 
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        Call<RSChannelModel> call = PostRest.post_active_channel(postData);
-        call.enqueue(new Callback<RSChannelModel>() {
-            @Override
-            public void onResponse(Call<RSChannelModel> call, Response<RSChannelModel> response) {
-                if(response.isSuccessful()){
-                    RSChannelModel getRes=response.body();
-                    String getStatus=getRes.getStatus();
-                    if(getStatus.equals("success")) {
-                        //Log.d("RSPush", "");
-                    } else if (!getRes.getMsg().isEmpty()){
-                        Log.e("RSPush",getRes.getMsg());
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<RSChannelModel> call, Throwable t) {
-                Log.e("RSPush","api server error!");
-            }
-        });
+        RSUtility cBack = new RSUtility();
+        new RSHttpConnection("active-channel", postQuery,cBack).execute();
+
     }
-
-
-
 
 
 
@@ -149,40 +112,18 @@ public class RSUtility {
     }
 
     private static void deleteChannelAction(String channelId, RSConfig rsConfig){
-        Retrofit retrfit=new Retrofit.Builder()
-                .baseUrl(RSSettings.getApiUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RSInterface PostRest=retrfit.create(RSInterface.class);
 
-        RSChannelModel postData=new RSChannelModel();
-        postData.setAppKey(rsConfig.getAppKey());
-        postData.setAppSecret(rsConfig.getAppSecret());
-        postData.setDeviceType("android");
-        postData.setChannelId(channelId);
+        Uri.Builder builder = new Uri.Builder();
+        builder.appendQueryParameter("appKey", rsConfig.getAppKey());
+        builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
+        builder.appendQueryParameter("deviceType", "android");
+        builder.appendQueryParameter("channelId",channelId);
 
+        String postQuery = builder.build().getEncodedQuery();
 
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        Call<RSChannelModel> call = PostRest.post_delete_channel(postData);
-        call.enqueue(new Callback<RSChannelModel>() {
-            @Override
-            public void onResponse(Call<RSChannelModel> call, Response<RSChannelModel> response) {
-                if(response.isSuccessful()){
-                    RSChannelModel getRes=response.body();
-                    String getStatus=getRes.getStatus();
-                    if(getStatus.equals("success")) {
-                        //Log.d("RSPush", "");
-                    } else if (!getRes.getMsg().isEmpty()){
-                        //Log.e("RSPush",getRes.getMsg());
-                    }
-                }
-            }
-            @Override
-            public void onFailure(Call<RSChannelModel> call, Throwable t) {
-                Log.e("RSPush","api server error!");
-            }
-        });
+        RSUtility cBack = new RSUtility();
+        new RSHttpConnection("delete-channel", postQuery,cBack).execute();
+
     }
 
 

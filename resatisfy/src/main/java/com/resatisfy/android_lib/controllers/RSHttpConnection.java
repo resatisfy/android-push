@@ -1,7 +1,11 @@
-package com.resatisfy.android_lib.utilities;
+package com.resatisfy.android_lib.controllers;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.resatisfy.android_lib.utilities.RSHttpsInterface;
+import com.resatisfy.android_lib.utilities.RSSettings;
 
 import org.json.JSONObject;
 
@@ -14,23 +18,25 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class reportHttpsAction extends AsyncTask<Void, Void, Void> {
+public class RSHttpConnection extends AsyncTask<Void, Void, Void> {
 
     public JSONObject responseobject;
-    public reportHttpsInterface callback;
-    public String reportString;
+    public RSHttpsInterface callback;
+    public String postUrl;
+    public String postQuery;
 
-
-
-    public reportHttpsAction(String reportString, reportHttpsInterface callback) {
-        this.reportString = reportString;
+    public RSHttpConnection(String postUrl, String postQuery, RSHttpsInterface callback) {
         this.callback = callback;
+        this.postUrl = postUrl;
+        this.postQuery = postQuery;
     }
+
+
 
     @Override
     protected Void doInBackground(Void... params) {
         try {
-            URL url = new URL(RSSettings.getApiUrl() + "post-report");
+            URL url = new URL(RSSettings.getApiUrl() + this.postUrl);
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setReadTimeout(10000);
             conn.setConnectTimeout(15000);
@@ -41,7 +47,7 @@ public class reportHttpsAction extends AsyncTask<Void, Void, Void> {
 
             OutputStream os = conn.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-            writer.write(reportString);
+            writer.write(this.postQuery);
             writer.flush();
             writer.close();
             os.close();
@@ -51,10 +57,8 @@ public class reportHttpsAction extends AsyncTask<Void, Void, Void> {
             responseobject = new JSONObject(bufferedReader.readLine());
 
             conn.disconnect();
-
-
-        } catch (Exception e) {
-            Log.e("RSCrashReporting : ", e.toString());
+        }catch (Exception e){
+            Log.e("RSPush : ", e.toString());
         }
         return null;
     }
@@ -63,13 +67,16 @@ public class reportHttpsAction extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        callback.reportHttpsCompletion(responseobject);
+
+        callback.RSHttpsCompletion(responseobject);
     }
 
 
 
 
+
+
+
+
+
 }
-
-
-

@@ -3,29 +3,25 @@ package com.resatisfy.android_lib;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.resatisfy.android_lib.models.RSDeviceRegModel;
+import com.resatisfy.android_lib.controllers.RSHttpConnection;
 import com.resatisfy.android_lib.utilities.RSConfig;
-import com.resatisfy.android_lib.utilities.RSInterface;
-import com.resatisfy.android_lib.utilities.RSSettings;
+import com.resatisfy.android_lib.utilities.RSHttpsInterface;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RSPush {
+
+public class RSPush implements RSHttpsInterface {
 
     private static SharedPreferences sharedPref;
     private static SharedPreferences.Editor editor;
@@ -63,52 +59,40 @@ public class RSPush {
 
     static void registerDevice(final Context context, RSConfig rsConfig, String token){
 
-        Retrofit retrfit=new Retrofit.Builder()
-                .baseUrl(RSSettings.getApiUrl())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RSInterface PostRest=retrfit.create(RSInterface.class);
+        Uri.Builder builder = new Uri.Builder();
+        builder.appendQueryParameter("appKey", rsConfig.getAppKey());
+        builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
+        builder.appendQueryParameter("deviceType", "android");
+        builder.appendQueryParameter("deviceToken",token);
+        builder.appendQueryParameter("fcmSenderId",rsConfig.getSenderId());
+        builder.appendQueryParameter("package",context.getPackageName());
+        builder.appendQueryParameter("channelId",rsChannelId);
 
-        RSDeviceRegModel postData=new RSDeviceRegModel();
-        postData.setAppKey(rsConfig.getAppKey());
-        postData.setAppSecret(rsConfig.getAppSecret());
-        postData.setDeviceToken(token);
-        postData.setDeviceType("android");
-        postData.setFcmSenderId(rsConfig.getSenderId());
-        postData.setIosAndroidId(context.getPackageName());
-        postData.setChannelId(rsChannelId);
+        String postQuery = builder.build().getEncodedQuery();
+
+        RSPush myPush = new RSPush();
+        new RSHttpConnection("post-register-device", postQuery,myPush).execute();
+
+    }
 
 
-        Map<String, String> map = new HashMap<>();
-        map.put("Content-Type", "application/json");
-        Call<RSDeviceRegModel> call = PostRest.post_register_device(postData);
-        call.enqueue(new Callback<RSDeviceRegModel>() {
-            @Override
-            public void onResponse(Call<RSDeviceRegModel> call, Response<RSDeviceRegModel> response) {
-                if(response.isSuccessful()){
-                    RSDeviceRegModel getRes=response.body();
-                    String getStatus=getRes.getStatus();
-                    
-                    if(getStatus.equals("success")) {
-                        String getIsActive = getRes.getIsActive();
-                        String rsChannelStatus = sharedPref.getString("rsChannelStatus", "");
-                        if(!rsChannelStatus.isEmpty() && getIsActive.equals(rsChannelStatus)){
+    @Override
+    public void RSHttpsCompletion(JSONObject json) {
+        try{
+            String getStatus = json.getString("status");
+            if(getStatus.equals("success")) {
+                String getIsActive = json.getString("isActive");
+                String rsChannelStatus = sharedPref.getString("rsChannelStatus", "");
+                if(!rsChannelStatus.isEmpty() && getIsActive.equals(rsChannelStatus)){
 
-                        }else{
-                            editor.putString("rsChannelStatus", getIsActive);
-                            editor.commit();
-                        }
-                    } else if (!getRes.getMsg().isEmpty()){
-                        Log.e("RSPush",getRes.getMsg());
-                    }
+                }else{
+                    editor.putString("rsChannelStatus", getIsActive);
+                    editor.commit();
                 }
+            } else if (!json.getString("msg").isEmpty()){
+                Log.e("RSPush",json.getString("msg") );
             }
-            @Override
-            public void onFailure(Call<RSDeviceRegModel> call, Throwable t) {
-                Log.e("RSPush","api server error!");
-            }
-        });
-
+        }catch (Exception e){}
     }
 
     public static String channelId(Context context){
@@ -151,6 +135,7 @@ public class RSPush {
 
 
     static void registerForPushNotifications(Context context, RSConfig rsConfig){
+
         try {
             String token = FirebaseInstanceId.getInstance().getToken();
             if(!token.isEmpty()){
@@ -159,6 +144,7 @@ public class RSPush {
         } catch (Exception e) {
             Log.e("RSPush","rsconfig.properties not set up properly!");
         }
+
     }
 
 
