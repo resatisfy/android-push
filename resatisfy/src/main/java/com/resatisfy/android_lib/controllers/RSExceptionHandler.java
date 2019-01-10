@@ -58,6 +58,8 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
         builder.appendQueryParameter("appKey", getConfig.getAppKey());
         builder.appendQueryParameter("appSecret", getConfig.getAppSecret());
         builder.appendQueryParameter("deviceType", "android");
+        builder.appendQueryParameter("cause", error.getCause().toString());
+        builder.appendQueryParameter("message", error.getMessage());
         builder.appendQueryParameter("stackTrace", result.toString());
         this.addExtraData(builder);
 
