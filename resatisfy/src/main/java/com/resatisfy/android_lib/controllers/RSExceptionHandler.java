@@ -109,7 +109,7 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
 
                     //defaultUEH.uncaughtException(tread, error);
                     android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(1);
+                    //System.exit(1);
 
                 } catch (Exception e) {
                     Log.e("RSCrashReporting : ", e.toString());
