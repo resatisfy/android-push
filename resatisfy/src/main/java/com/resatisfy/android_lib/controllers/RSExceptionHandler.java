@@ -48,6 +48,7 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
     }
 
     public void uncaughtException(final Thread tread, final Throwable error) {
+
         final Writer result = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(result);
         error.printStackTrace(printWriter);
@@ -58,18 +59,32 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
         builder.appendQueryParameter("appKey", getConfig.getAppKey());
         builder.appendQueryParameter("appSecret", getConfig.getAppSecret());
         builder.appendQueryParameter("deviceType", "android");
-        builder.appendQueryParameter("cause", error.getCause().toString());
-        builder.appendQueryParameter("message", error.getMessage());
+
+        try{
+            builder.appendQueryParameter("message", error.getMessage());
+        }catch (Exception e){  }
+
+        try{
+            if(error.getCause() != null){
+                builder.appendQueryParameter("cause", error.getCause().toString());
+            }else{
+                builder.appendQueryParameter("cause", error.getMessage());
+            }
+        }catch (Exception e){  }
+
+
         builder.appendQueryParameter("stackTrace", result.toString());
         this.addExtraData(builder);
 
         final String postedQuery = builder.build().getEncodedQuery();
+
 
         new Thread() {
             @Override
             public void run() {
                 Looper.prepare();
 
+                //System.out.println("----------------//3-----------------------");
                 try {
                     URL url = new URL(RSSettings.getApiUrl() + "post-report");
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
@@ -92,9 +107,9 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
                     conn.disconnect();
                     RSHttpsCompletion(responseobject);
 
-
-
-                    defaultUEH.uncaughtException(tread, error);
+                    //defaultUEH.uncaughtException(tread, error);
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
 
                 } catch (Exception e) {
                     Log.e("RSCrashReporting : ", e.toString());
@@ -137,7 +152,6 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
         builder.appendQueryParameter("channelId",RSPush.channelId(context));
 
 
-        builder.appendQueryParameter("phone_model",android.os.Build.MODEL);
         builder.appendQueryParameter("android_version", android.os.Build.VERSION.RELEASE);
         builder.appendQueryParameter("board",android.os.Build.BOARD);
         builder.appendQueryParameter("brand",android.os.Build.BRAND);
