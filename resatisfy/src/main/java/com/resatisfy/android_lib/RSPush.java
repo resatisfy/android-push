@@ -65,7 +65,7 @@ public class RSPush implements RSHttpsInterface {
         builder.appendQueryParameter("deviceType", "android");
         builder.appendQueryParameter("deviceToken",token);
         builder.appendQueryParameter("fcmSenderId",rsConfig.getSenderId());
-        builder.appendQueryParameter("package",context.getPackageName());
+        builder.appendQueryParameter("iosAndroidId",context.getPackageName());
         builder.appendQueryParameter("channelId",rsChannelId);
 
         String postQuery = builder.build().getEncodedQuery();
