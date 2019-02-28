@@ -1,40 +1,37 @@
 package com.resatisfy.android_lib.controllers;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.Map;
+import java.util.Set;
 
-public class RSPushReciver extends BroadcastReceiver {
-    private static final String TAG = "RSPush : ";
+public class RSPushReciver extends FirebaseMessagingService {
+    public static final String TAG = "MsgFirebaseServ";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        if (intent == null) {
-            Log.d(TAG, "Received intent null");
-        } else {
-            processPush(context, intent);
-        }
-    }
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        RemoteMessage.Notification myNoti = remoteMessage.getNotification();
 
-    private void processPush(Context context, Intent intent) {
+        String title = remoteMessage.getData().get("title");
+        String message = remoteMessage.getData().get("message");
 
-        //process data
-//        String title = intent.getExtras().getString("title");
-//        String msg = intent.getExtras().getString("msg");
-//
-//        System.out.println("--------------------------");
-//        System.out.println(title);
-//        System.out.println(msg);
+        System.out.println("----------------------");
+        System.out.println(myNoti.getTitle());
 
-        //this.launchSomeActivity(context,title);
-        //this.sendNotification(context,title);
+        Map myData = remoteMessage.getData();
+
+
+        JSONObject json = new JSONObject(myData);
+        System.out.println("----------------------");
+        System.out.println("----------------------");
+
+
 
     }
-
-
 
 
 

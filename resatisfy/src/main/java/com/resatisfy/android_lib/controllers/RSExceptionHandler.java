@@ -49,10 +49,20 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     public void uncaughtException(final Thread tread, final Throwable error) {
 
-        final Writer result = new StringWriter();
-        final PrintWriter printWriter = new PrintWriter(result);
-        error.printStackTrace(printWriter);
-        printWriter.close();
+        StringBuilder stackStrace = new StringBuilder();
+        for (StackTraceElement element : error.getStackTrace()) {
+            stackStrace.append(element.toString());
+            stackStrace.append("==//==");
+        }
+
+//        String fileName = ""; String lineNumber = "";
+//        try{
+//            String fstEle = error.getStackTrace()[0].toString();
+//            String[] fstEleExplode = fstEle.split("()");
+//
+//            System.out.println("--------------------------2");
+//            System.out.println();
+//        }catch (Exception e){  }
 
 
         Uri.Builder builder = new Uri.Builder();
@@ -73,7 +83,7 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
         }catch (Exception e){  }
 
 
-        builder.appendQueryParameter("stackTrace", result.toString());
+        builder.appendQueryParameter("stackTrace", stackStrace.toString());
         this.addExtraData(builder);
 
         final String postedQuery = builder.build().getEncodedQuery();
@@ -86,7 +96,7 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
 
                 //System.out.println("----------------//3-----------------------");
                 try {
-                    URL url = new URL(RSSettings.getApiUrl() + "post-report");
+                    URL url = new URL(RSSettings.getApiUrl() + "post-report-android");
                     HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
                     conn.setReadTimeout(10000);
                     conn.setConnectTimeout(15000);
@@ -107,9 +117,9 @@ public class RSExceptionHandler implements Thread.UncaughtExceptionHandler {
                     conn.disconnect();
                     RSHttpsCompletion(responseobject);
 
-                    //defaultUEH.uncaughtException(tread, error);
+                    /////defaultUEH.uncaughtException(tread, error);
                     android.os.Process.killProcess(android.os.Process.myPid());
-                    //System.exit(1);
+                    ////System.exit(1);
 
                 } catch (Exception e) {
                     Log.e("RSCrashReporting : ", e.toString());
