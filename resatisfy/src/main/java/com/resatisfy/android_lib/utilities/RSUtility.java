@@ -152,14 +152,15 @@ public class RSUtility implements RSHttpsInterface {
     public static void RSPushProcess(Context context, Intent intent){
         Bundle getExtras = intent.getExtras();
         if (getExtras != null) {
-            if (getExtras.containsKey("thisPushId")) {
+            if (getExtras.containsKey("thisPushId") && getExtras.containsKey("thisPushType")) {
                 String pushId = intent.getExtras().getString("thisPushId");
-                postAppOpened(context,pushId);
+                String type = intent.getExtras().getString("thisPushType");
+                postAppOpened(context,pushId,type);
             }
         }
     }
 
-    private static void postAppOpened(Context context, String pushId){
+    private static void postAppOpened(Context context, String pushId, String type){
         String channelId = RSPush.channelId(context);
         if(channelId.isEmpty()){
             Log.e("RSPush", "Channel Id is empty.");
@@ -168,12 +169,12 @@ public class RSUtility implements RSHttpsInterface {
             if(getConfig.getAppKey().isEmpty()){
                 Log.e("RSPush","config error!");
             }else {
-                postAppOpenedAction(context, channelId, getConfig, pushId);
+                postAppOpenedAction(context, channelId, getConfig, pushId, type);
             }
         }
     }
 
-    private static void postAppOpenedAction(Context context, String channelId, RSConfig rsConfig, String pushId){
+    private static void postAppOpenedAction(Context context, String channelId, RSConfig rsConfig, String pushId, String type){
 
         Uri.Builder builder = new Uri.Builder();
         builder.appendQueryParameter("appKey", rsConfig.getAppKey());
@@ -181,6 +182,7 @@ public class RSUtility implements RSHttpsInterface {
         builder.appendQueryParameter("deviceType", "android");
         builder.appendQueryParameter("channelId",channelId);
         builder.appendQueryParameter("pushId",pushId);
+        builder.appendQueryParameter("type",type);
         builder.appendQueryParameter("package",context.getPackageName());
 
         String postQuery = builder.build().getEncodedQuery();
