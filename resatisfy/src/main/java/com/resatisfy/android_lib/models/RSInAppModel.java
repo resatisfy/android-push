@@ -1,6 +1,6 @@
 package com.resatisfy.android_lib.models;
 
-public class RSReportModel {
+public class RSInAppModel {
 
     private String status;
     public String getStatus() { return this.status; }
@@ -22,20 +22,13 @@ public class RSReportModel {
     public String getDeviceType() { return this.deviceType; }
     public void setDeviceType(String deviceType) { this.deviceType = deviceType; }
 
-
-    private String stackTrace;
-    public String getStackTrace() { return this.stackTrace; }
-    public void setStackTrace(String stackTrace) { this.stackTrace = stackTrace; }
-
     private String channelId;
     public String getChannelId() { return this.channelId; }
     public void setChannelId(String channelId) { this.channelId = channelId; }
 
+    private String inAppMsgId;
+    public String getInAppMsgId() { return this.inAppMsgId; }
+    public void setInAppMsgId(String inAppMsgId) { this.inAppMsgId = inAppMsgId; }
 
-    @Override
-    public String toString()
-    {
-        return "appKey = "+appKey+"&appSecret = "+appSecret+"&deviceType = "+deviceType+"&stackTrace = "+stackTrace;
-    }
 
 }

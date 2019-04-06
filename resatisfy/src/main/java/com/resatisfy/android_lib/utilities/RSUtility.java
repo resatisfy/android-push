@@ -26,7 +26,7 @@ public class RSUtility implements RSHttpsInterface {
             Log.e("RSPush", "Channel Id is empty.");
         }else{
             RSConfig getConfig = RSConfig.defaultConfig(context);
-            if(getConfig.getAppKey().isEmpty()){
+            if(getConfig.getAppKey() == null){
                 Log.e("RSPush","config error!");
             }else{
                 SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
@@ -73,7 +73,7 @@ public class RSUtility implements RSHttpsInterface {
             Log.e("RSPush", "Channel Id is empty.");
         }else{
             RSConfig getConfig = RSConfig.defaultConfig(context);
-            if(getConfig.getAppKey().isEmpty()){
+            if(getConfig.getAppKey() == null){
                 Log.e("RSPush","config error!");
             }else {
                 SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
@@ -110,7 +110,7 @@ public class RSUtility implements RSHttpsInterface {
             Log.e("RSPush", "Channel Id is empty.");
         }else{
             RSConfig getConfig = RSConfig.defaultConfig(context);
-            if(getConfig.getAppKey().isEmpty()){
+            if(getConfig.getAppKey() == null){
                 Log.e("RSPush","config error!");
             }else {
                 deleteChannelAction(channelId, getConfig);
@@ -166,7 +166,7 @@ public class RSUtility implements RSHttpsInterface {
             Log.e("RSPush", "Channel Id is empty.");
         }else{
             RSConfig getConfig = RSConfig.defaultConfig(context);
-            if(getConfig.getAppKey().isEmpty()){
+            if(getConfig.getAppKey() == null){
                 Log.e("RSPush","config error!");
             }else {
                 postAppOpenedAction(context, channelId, getConfig, pushId, type);
@@ -182,7 +182,7 @@ public class RSUtility implements RSHttpsInterface {
         builder.appendQueryParameter("deviceType", "android");
         builder.appendQueryParameter("channelId",channelId);
         builder.appendQueryParameter("pushId",pushId);
-        builder.appendQueryParameter("type",type);
+        builder.appendQueryParameter("recordType",type);
         builder.appendQueryParameter("package",context.getPackageName());
 
         String postQuery = builder.build().getEncodedQuery();

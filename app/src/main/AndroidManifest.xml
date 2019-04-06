@@ -14,12 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:name=".MyPushReceiver">
+
+        <service android:name=".MyPushReceiver">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="${applicationId}" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </receiver>
+        </service>
+
 
         <activity android:name=".MainActivity">
             <intent-filter>

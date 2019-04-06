@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 
 /**
- * Instrumented test, which will execute on an Android device.
+ * Instrumented in_app_msg, which will execute on an Android device.
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
@@ -18,9 +18,9 @@ import static org.junit.Assert.*;
 public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
-        // Context of the app under test.
+        // Context of the app under in_app_msg.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.resatisfy.android_lib.test", appContext.getPackageName());
+        assertEquals("com.resatisfy.android_lib.in_app_msg", appContext.getPackageName());
     }
 }

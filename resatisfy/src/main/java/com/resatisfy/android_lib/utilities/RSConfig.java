@@ -19,29 +19,16 @@ public class RSConfig {
 
     public static RSConfig defaultConfig(Context context){
         RSConfig myConfig = new RSConfig();
-        SharedPreferences sharedPref = context.getSharedPreferences("RSFlight_session", Context.MODE_PRIVATE);
-        String RSFlightAppKey = sharedPref.getString("RSFlightAppKey", "");
-        if(RSFlightAppKey.length() == 0){
-            try {
-                myConfig.developmentAppKey = getProperty("developmentAppKey",context);
-                myConfig.developmentAppSecret = getProperty("developmentAppSecret",context);
-                myConfig.productionAppKey = getProperty("productionAppKey",context);
-                myConfig.productionAppSecret = getProperty("productionAppSecret",context);
-                myConfig.fcmSenderId = getProperty("fcmSenderId",context);
-            } catch (IOException e) {
-                Log.e("RSPush","rsconfig.properties not set up properly!");
-            }
-        }else{
-            String RSFlightAppSecret = sharedPref.getString("RSFlightAppSecret", "");
-            String RSFlightGSMSenderId = sharedPref.getString("RSFlightGSMSenderId", "");
 
-            myConfig.developmentAppKey = RSFlightAppKey;
-            myConfig.developmentAppSecret = RSFlightAppSecret;
-            myConfig.productionAppKey = RSFlightAppKey;
-            myConfig.productionAppSecret = RSFlightAppSecret;
-            myConfig.fcmSenderId = RSFlightGSMSenderId;
+        try {
+            myConfig.developmentAppKey = getProperty("developmentAppKey",context);
+            myConfig.developmentAppSecret = getProperty("developmentAppSecret",context);
+            myConfig.productionAppKey = getProperty("productionAppKey",context);
+            myConfig.productionAppSecret = getProperty("productionAppSecret",context);
+            myConfig.fcmSenderId = getProperty("fcmSenderId",context);
+        } catch (IOException e) {
+            Log.e("RSPush","rsconfig.properties not set up properly!");
         }
-
 
         boolean isDebuggable = (0 != (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         if(isDebuggable){

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:id="@+id/inAppMagMain">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#60000000"
+        android:id="@+id/inAppMagMain2"
+        android:gravity="center">
+        <RelativeLayout
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@layout/utilities_pop_radius"
+            android:id="@+id/inAppPop">
+            <Button
+                android:id="@+id/rsMsgCrossBtn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="x"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:textColor="#4f4f4f"
+                android:textSize="14dp"
+                android:background="@android:color/transparent"
+                android:clickable="true"/>
+            <LinearLayout
+                android:padding="15dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:id="@+id/inAppPop2">
+
+                <TextView
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:id="@+id/rsMsgTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload To be Featured!"
+                    android:textColor="#000000"
+                    android:fontFamily="@font/helvetica_bold"
+                    android:textAlignment="center"
+                    android:textSize="18dp"/>
+
+                <View
+                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#535184"/>
+
+                <TextView
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textAlignment="center"
+                    android:id="@+id/rsMsgDes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/helvetica"
+                    android:text="Get Featured on Spotlight! Grow your fan base! Upload your short video now!"
+                    android:textColor="#000000"
+                    android:textSize="14dp"/>
+
+                <LinearLayout
+                    android:id="@+id/rsButtonBottomArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+                    <View
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#535184"/>
+
+                    <Button
+                        android:background="@layout/utilities_pop_btn_radius"
+                        android:textColor="#ffffff"
+                        android:layout_width="wrap_content"
+                        android:paddingRight="18dp"
+                        android:fontFamily="@font/helvetica"
+                        android:paddingLeft="18dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/rsInAppButtonAction"
+                        android:textAllCaps="true"
+                        android:textSize="14dp"
+                        android:text="CLICK HERE!"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
