@@ -1,13 +1,18 @@
 package com.resatisfy.android_lib;
 
 
+import android.app.Activity;
 import android.content.Context;
 
+import android.content.ContextWrapper;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 
+import com.google.firebase.FirebaseApp;
 import com.resatisfy.android_lib.controllers.InAppController;
 import com.resatisfy.android_lib.controllers.RSHttpConnection;
 import com.resatisfy.android_lib.models.InAppData;
@@ -22,22 +27,36 @@ import org.json.JSONObject;
 public class RSInAppMessage  implements RSHttpsInterface {
 
     public static Context context;
+    public static Boolean shouldCall = true;
+
 
     public static void takeOff(final Context context) {
+
         RSInAppMessage.context = context;
 
         final Handler handler = new Handler();
         final int delay = 5000;
         handler.postDelayed(new Runnable(){
             public void run(){
-                ////start here
-                RSInAppMessage.startCheckingInAppMsg(context);
+                if(shouldCall == true){
+                    RSInAppMessage.startCheckingInAppMsg(context);
+                }
                 handler.postDelayed(this, delay);
             }
         }, delay);
 
 
     }
+
+
+    public static Activity getActivity(Context context) {
+        if (context == null) return null;
+        if (context instanceof Activity) return (Activity) context;
+        if (context instanceof ContextWrapper) return getActivity(((ContextWrapper)context).getBaseContext());
+        return null;
+    }
+
+
 
     private static void  startCheckingInAppMsg(Context context){
         String channelId = RSPush.channelId(context);
@@ -74,6 +93,7 @@ public class RSInAppMessage  implements RSHttpsInterface {
         try{
             String getStatus = json.getString("status");
             if(getStatus.equals("success")) {
+                shouldCall = false;
                 String getInAppData = json.getString("inAppData");
                 if(!getInAppData.isEmpty()){
                     try {

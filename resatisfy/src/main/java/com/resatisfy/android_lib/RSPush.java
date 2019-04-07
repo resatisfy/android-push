@@ -31,18 +31,23 @@ public class RSPush implements RSHttpsInterface {
         RSConfig getConfig = RSConfig.defaultConfig(context);
         try {
             if(getConfig.getAppKey().length() > 0){
-                sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
-                editor =  sharedPref.edit();
-                rsChannelId = sharedPref.getString("rsChannelId", "");
-                if(rsChannelId.length() == 0){
-                    rsChannelId = RSPush.createChannel();
-                    editor.putString("rsChannelId",rsChannelId);
-                    editor.commit();
-                }
+                channelIdCreationSteo(context);
                 RSPush.registerForPushNotifications(context,getConfig);
             }
         } catch (Exception e) {
             Log.e("RSPush","rsconfig.properties not set up properly!");
+        }
+    }
+
+
+    private static void channelIdCreationSteo(Context context){
+        sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
+        editor =  sharedPref.edit();
+        rsChannelId = sharedPref.getString("rsChannelIdSelimDevelopMentKey", "");
+        if(rsChannelId.length() == 0){
+            rsChannelId = RSPush.createChannel();
+            editor.putString("rsChannelIdSelimDevelopMentKey",rsChannelId);
+            editor.commit();
         }
     }
 
@@ -64,7 +69,7 @@ public class RSPush implements RSHttpsInterface {
         builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
         builder.appendQueryParameter("deviceType", "android");
         builder.appendQueryParameter("deviceToken",token);
-        builder.appendQueryParameter("fcmSenderId",rsConfig.getSenderId());
+        builder.appendQueryParameter("fcmSenderId",rsConfig .getSenderId());
         builder.appendQueryParameter("iosAndroidId",context.getPackageName());
         builder.appendQueryParameter("channelId",rsChannelId);
 
@@ -96,14 +101,9 @@ public class RSPush implements RSHttpsInterface {
     }
 
     public static String channelId(Context context){
+        channelIdCreationSteo(context);
         SharedPreferences sharedPref = context.getSharedPreferences("resatisfy_session", Context.MODE_PRIVATE);
-        String rsChannelId = sharedPref.getString("rsChannelId", "");
-
-        if(rsChannelId.isEmpty()){
-            return "RSPush : rsconfig.properties not set up properly!";
-        }else{
-            return rsChannelId;
-        }
+        return sharedPref.getString("rsChannelIdSelimDevelopMentKey", "");
     }
 
     public static String getChannelStatus(Context context){

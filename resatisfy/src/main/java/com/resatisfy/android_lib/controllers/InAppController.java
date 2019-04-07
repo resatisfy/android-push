@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.resatisfy.android_lib.R;
+import com.resatisfy.android_lib.RSInAppMessage;
 import com.resatisfy.android_lib.RSPush;
 import com.resatisfy.android_lib.models.InAppData;
 import com.resatisfy.android_lib.utilities.RSConfig;
@@ -56,6 +57,7 @@ public class InAppController  implements RSHttpsInterface {
         rsMsgCrossBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RSInAppMessage.shouldCall = true;
                 popupWindow.dismiss();
             }
         });
@@ -70,12 +72,13 @@ public class InAppController  implements RSHttpsInterface {
             rsInAppButtonAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    RSInAppMessage.shouldCall = true;
                     popupWindow.dismiss();
                     InAppController.inAppClickAction(context,inAppData);
                 }
             });
         }else{
-            rsButtonBottomArea.setVisibility(View.INVISIBLE);
+            rsButtonBottomArea.setVisibility(View.GONE);
         }
 
 

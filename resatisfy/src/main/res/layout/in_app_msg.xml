@@ -50,7 +50,7 @@
                     android:id="@+id/rsMsgTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Upload To be Featured!"
+                    android:text=""
                     android:textColor="#000000"
                     android:fontFamily="@font/helvetica_bold"
                     android:textAlignment="center"
@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/helvetica"
-                    android:text="Get Featured on Spotlight! Grow your fan base! Upload your short video now!"
+                    android:text=""
                     android:textColor="#000000"
                     android:textSize="14dp"/>
 
