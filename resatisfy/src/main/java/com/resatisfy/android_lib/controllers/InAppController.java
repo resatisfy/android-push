@@ -59,6 +59,7 @@ public class InAppController  implements RSHttpsInterface {
             public void onClick(View view) {
                 RSInAppMessage.shouldCall = true;
                 popupWindow.dismiss();
+                InAppController.inAppClickAction(context,inAppData,"no");
             }
         });
 
@@ -74,7 +75,7 @@ public class InAppController  implements RSHttpsInterface {
                 public void onClick(View view) {
                     RSInAppMessage.shouldCall = true;
                     popupWindow.dismiss();
-                    InAppController.inAppClickAction(context,inAppData);
+                    InAppController.inAppClickAction(context,inAppData,"yes");
                 }
             });
         }else{
@@ -89,7 +90,7 @@ public class InAppController  implements RSHttpsInterface {
     }
 
 
-    private static void inAppClickAction(Context context, InAppData inAppData){
+    private static void inAppClickAction(Context context, InAppData inAppData, String isClicked){
         String channelId = RSPush.channelId(context);
         RSConfig getConfig = RSConfig.defaultConfig(context);
 
@@ -97,36 +98,40 @@ public class InAppController  implements RSHttpsInterface {
         String inAppMsgId = inAppData.getInAppMsgId();
         String msgLink = inAppData.getMsgLink();
 
-        if(!channelId.isEmpty() && !inAppMsgId.isEmpty() && getConfig.getAppKey() != null){ inAppSendReports(channelId,inAppMsgId,getConfig); }
+        if(!channelId.isEmpty() && !inAppMsgId.isEmpty() && getConfig.getAppKey() != null){ inAppSendReports(channelId,inAppMsgId,getConfig,isClicked); }
 
         //give actions
-        if(!buttonActionType.isEmpty() && !msgLink.isEmpty()){
-            if(buttonActionType.equals("web")){
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(msgLink));
-                context.startActivity(browserIntent);
-            }
-            else if(buttonActionType.equals("share")){
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, inAppData.getMsgTitle());
-                i.putExtra(Intent.EXTRA_TEXT, msgLink);
-                context.startActivity(Intent.createChooser(i, inAppData.getMsgTitle()));
-            }
-            else if(buttonActionType.equals("deep")){
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(msgLink));
-                context.startActivity(browserIntent);
+        if(isClicked.equals("yes")){
+            if(!buttonActionType.isEmpty() && !msgLink.isEmpty()){
+                if(buttonActionType.equals("web")){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(msgLink));
+                    context.startActivity(browserIntent);
+                }
+                else if(buttonActionType.equals("share")){
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, inAppData.getMsgTitle());
+                    i.putExtra(Intent.EXTRA_TEXT, msgLink);
+                    context.startActivity(Intent.createChooser(i, inAppData.getMsgTitle()));
+                }
+                else if(buttonActionType.equals("deep")){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(msgLink));
+                    context.startActivity(browserIntent);
+                }
             }
         }
+
     }
 
 
-    private static void inAppSendReports(String channelId, String inAppMsgId, RSConfig rsConfig){
+    private static void inAppSendReports(String channelId, String inAppMsgId, RSConfig rsConfig, String isClicked){
         Uri.Builder builder = new Uri.Builder();
         builder.appendQueryParameter("appKey", rsConfig.getAppKey());
         builder.appendQueryParameter("appSecret", rsConfig.getAppSecret());
         builder.appendQueryParameter("deviceType", "android");
         builder.appendQueryParameter("channelId",channelId);
         builder.appendQueryParameter("inAppMsgId",inAppMsgId);
+        builder.appendQueryParameter("isClicked",isClicked);
 
         String postQuery = builder.build().getEncodedQuery();
 
