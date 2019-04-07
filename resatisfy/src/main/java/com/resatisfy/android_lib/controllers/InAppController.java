@@ -82,11 +82,11 @@ public class InAppController  implements RSHttpsInterface {
             rsButtonBottomArea.setVisibility(View.GONE);
         }
 
-
-        //add to our rootview
-        View rootView = ((Activity)context).getWindow().getDecorView().getRootView();
-        popupWindow.showAtLocation(rootView, Gravity.NO_GRAVITY, 0, 0);
-
+        try{
+            //add to our rootview
+            View rootView = ((Activity)context).getWindow().getDecorView().getRootView();
+            popupWindow.showAtLocation(rootView, Gravity.NO_GRAVITY, 0, 0);
+        }catch (Exception e){}
     }
 
 
